@@ -11,6 +11,8 @@ spring:
     application:
         name: kafkaconsumerapp
     kafka:
+        producer:
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
         consumer:
             auto-offset-reset: earliest
             bootstrap-servers: 192.168.29.109:9092
