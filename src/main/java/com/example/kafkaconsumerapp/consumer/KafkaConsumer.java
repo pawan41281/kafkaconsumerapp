@@ -3,12 +3,10 @@ package com.example.kafkaconsumerapp.consumer;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 
-import com.example.vo.TransactionVo;
+import com.example.vo.AccountTransactionVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,19 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConsumer {
 
 	// @RetryableTopic is used for Dead Letter Topics or Dead Letter Queue
-	@RetryableTopic(attempts = "3", backoff = @Backoff(delay = 2000, multiplier = 2))
+	@RetryableTopic(attempts = "3")
 	@KafkaListener(topics = "transactions", groupId = "transactions_group")
-	public void subscribeTransactionMessage(TransactionVo transactionVo) {
+	public void subscribeTransactionMessage(AccountTransactionVo transactionVo) {
 		log.info("Received: {}", transactionVo);
 		if (transactionVo.getAmount() > 0) {
-			System.out.println("consumer1|subscribe Transaction Message|" + transactionVo);
+			log.info("Account Transaction Subscribed :: {}",transactionVo);
 		} else {
-			throw new RuntimeException("Transaction amount is not valid!!");
+			throw new org.springframework.kafka.KafkaException("Transaction amount is not valid!!");
 		}
 	}
 
 	@DltHandler
-	public void handleDLT(TransactionVo transactionVo) {
+	public void handleDLT(AccountTransactionVo transactionVo) {
 		log.info("DLT : {}",transactionVo);
 	}
 

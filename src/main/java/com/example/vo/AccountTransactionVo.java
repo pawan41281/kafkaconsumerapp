@@ -1,5 +1,6 @@
 package com.example.vo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
@@ -13,11 +14,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TransactionVo {
+public class AccountTransactionVo implements Serializable {
 
-	private String transactionId;
-	private String accountNo;
-	private double amount;
+	private Integer transactionId;
+	private Integer accountNo;
+	private Double amount;
 	private String operation;
 	private Timestamp transactionTimestamp;
 	
